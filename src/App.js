@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Login from './components/Login';
+import Header from './components/Header';
 import FormularioCotizacion from './components/FormularioCotizacion';
 import ResultadosCotizacion from './components/ResultadosCotizacion';
 import VisualizadorCSV from './components/VisualizadorCSV';
@@ -8,7 +11,8 @@ import { calcularCotizacion, validarDatos } from './services/calculoService';
 import { generarPDF } from './services/pdfService';
 import './App.css';
 
-function App() {
+function AppContent() {
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [serviciosData, setServiciosData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,35 +21,37 @@ function App() {
 
   // Cargar CSV al montar el componente
   useEffect(() => {
-    const inicializarDatos = async () => {
-      try {
-        setLoading(true);
-        // Ruta relativa al archivo CSV en la carpeta public
-        const datos = await cargarCSV('/2 DATO PARA COTIZAR COPIA.csv');
+    if (isAuthenticated) {
+      const inicializarDatos = async () => {
+        try {
+          setLoading(true);
+          // Ruta relativa al archivo CSV en la carpeta public
+          const datos = await cargarCSV('/2 DATO PARA COTIZAR COPIA.csv');
 
-        if (!datos || datos.length === 0) {
-          throw new Error('El archivo CSV no contiene datos válidos');
+          if (!datos || datos.length === 0) {
+            throw new Error('El archivo CSV no contiene datos válidos');
+          }
+
+          setServiciosData(datos);
+          mostrarAlerta(
+            'success',
+            `✓ Datos cargados correctamente. ${datos.length} servicios disponibles.`
+          );
+        } catch (err) {
+          console.error('Error al cargar datos:', err);
+          setError(err.message);
+          mostrarAlerta(
+            'error',
+            'Error al cargar el archivo CSV. Asegúrese de que el archivo esté en la carpeta public.'
+          );
+        } finally {
+          setLoading(false);
         }
+      };
 
-        setServiciosData(datos);
-        mostrarAlerta(
-          'success',
-          `✓ Datos cargados correctamente. ${datos.length} servicios disponibles.`
-        );
-      } catch (err) {
-        console.error('Error al cargar datos:', err);
-        setError(err.message);
-        mostrarAlerta(
-          'error',
-          'Error al cargar el archivo CSV. Asegúrese de que el archivo esté en la carpeta public.'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    inicializarDatos();
-  }, []);
+      inicializarDatos();
+    }
+  }, [isAuthenticated]);
 
   const mostrarAlerta = (tipo, mensaje, duracion = 5000) => {
     setAlerta({ tipo, mensaje });
@@ -124,9 +130,27 @@ function App() {
     }, 100);
   };
 
+  if (authLoading) {
+    return (
+      <div className="app">
+        <div className="container">
+          <div className="loading-screen">
+            <div className="loading-spinner"></div>
+            <h2>Cargando...</h2>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
   if (loading) {
     return (
       <div className="app">
+        <Header />
         <div className="container">
           <div className="loading-screen">
             <div className="loading-spinner"></div>
@@ -141,6 +165,7 @@ function App() {
   if (error || serviciosData.length === 0) {
     return (
       <div className="app">
+        <Header />
         <div className="container">
           <div className="error-screen">
             <div className="error-icon">⚠️</div>
@@ -168,18 +193,8 @@ function App() {
 
   return (
     <div className="app">
+      <Header />
       <div className="container">
-        {/* Header */}
-        <header className="app-header">
-          <h1 className="app-title">
-            <span className="title-icon">🏢</span>
-            Sistema de Cotización de Servicios
-          </h1>
-          <p className="app-subtitle">
-            Sistema profesional de cotización basado en datos de servicios
-          </p>
-        </header>
-
         {/* Banner de datos cargados */}
         <div className="data-loaded-banner">
           <div className="banner-content">
@@ -256,11 +271,19 @@ function App() {
         <footer className="app-footer">
           <p>© 2024 Sistema de Cotización de Servicios</p>
           <p className="footer-detail">
-            Desarrollado con React • Cálculos basados en archivo CSV
+            Desarrollado con React • Backend API REST con Node.js + MySQL
           </p>
         </footer>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
