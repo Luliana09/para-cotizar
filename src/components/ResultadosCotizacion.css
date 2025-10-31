@@ -228,11 +228,13 @@
 .result-actions {
   display: flex;
   justify-content: center;
+  gap: 20px;
   margin-top: 30px;
+  flex-wrap: wrap;
 }
 
-.btn-success {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+.btn-success,
+.btn-primary {
   color: white;
   display: flex;
   align-items: center;
@@ -247,12 +249,29 @@
   font-family: inherit;
 }
 
+.btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
 .btn-success:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
 }
 
 .btn-success:active {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:active {
   transform: translateY(-1px);
 }
 

@@ -151,12 +151,14 @@ function AppContent() {
     setAlerta({ tipo: '', mensaje: '' });
   };
 
-  const handleExportar = () => {
+  const handleExportarPDF = () => {
     if (resultado) {
       generarPDF(resultado);
-    } else {
-      window.print();
     }
+  };
+
+  const handleImprimir = () => {
+    window.print();
   };
 
   const handleCargarCotizacion = (cotizacion) => {
@@ -330,7 +332,8 @@ function AppContent() {
         {resultado && (
           <ResultadosCotizacion
             resultado={resultado}
-            onExportar={handleExportar}
+            onExportarPDF={handleExportarPDF}
+            onImprimir={handleImprimir}
           />
         )}
 

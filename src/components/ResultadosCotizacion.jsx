@@ -2,7 +2,7 @@ import React from 'react';
 import { formatearMoneda, formatearNumero } from '../utils/conversiones';
 import './ResultadosCotizacion.css';
 
-const ResultadosCotizacion = ({ resultado, onExportar }) => {
+const ResultadosCotizacion = ({ resultado, onExportarPDF, onImprimir }) => {
   if (!resultado) return null;
 
   const { entrada, calculos, validaciones, info } = resultado;
@@ -156,11 +156,15 @@ const ResultadosCotizacion = ({ resultado, onExportar }) => {
         </div>
       )}
 
-      {/* Botón de Exportar */}
+      {/* Botones de Exportar e Imprimir */}
       <div className="result-actions">
-        <button onClick={onExportar} className="btn btn-success">
+        <button onClick={onExportarPDF} className="btn btn-success">
           <span className="btn-icon">📄</span>
-          Exportar / Imprimir
+          Exportar PDF
+        </button>
+        <button onClick={onImprimir} className="btn btn-primary">
+          <span className="btn-icon">🖨️</span>
+          Imprimir
         </button>
       </div>
     </div>
