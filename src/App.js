@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import Header from './components/Header';
+import GestionClientes from './components/GestionClientes';
 import FormularioCotizacion from './components/FormularioCotizacion';
 import ResultadosCotizacion from './components/ResultadosCotizacion';
 import VisualizadorCSV from './components/VisualizadorCSV';
@@ -9,15 +10,17 @@ import HistorialCotizaciones, { guardarEnHistorial } from './components/Historia
 import { cargarCSV } from './services/csvService';
 import { calcularCotizacion, validarDatos } from './services/calculoService';
 import { generarPDF } from './services/pdfService';
+import { cotizacionesService } from './services/apiService';
 import './App.css';
 
 function AppContent() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading, usuario } = useAuth();
   const [serviciosData, setServiciosData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [resultado, setResultado] = useState(null);
   const [alerta, setAlerta] = useState({ tipo: '', mensaje: '' });
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
 
   // Cargar CSV al montar el componente
   useEffect(() => {
@@ -60,8 +63,14 @@ function AppContent() {
     }
   };
 
-  const handleCalcular = (datos) => {
+  const handleCalcular = async (datos) => {
     try {
+      // Validar que haya un cliente seleccionado
+      if (!clienteSeleccionado) {
+        mostrarAlerta('error', 'Por favor seleccione un cliente antes de cotizar', 8000);
+        return;
+      }
+
       // Validar datos
       const validacion = validarDatos(datos);
       if (!validacion.valido) {
@@ -82,14 +91,47 @@ function AppContent() {
           `Advertencia: El área es menor al tamaño mínimo (${resultadoCalculo.validaciones.tamañoMinimo.tamañoMinimo} ft²)`,
           8000
         );
-      } else {
-        mostrarAlerta('success', '✓ Cotización calculada exitosamente', 3000);
       }
 
       setResultado(resultadoCalculo);
 
-      // Guardar en historial
+      // Guardar en historial local (fallback)
       guardarEnHistorial(resultadoCalculo);
+
+      // Guardar en base de datos
+      try {
+        const cotizacionData = {
+          cliente_id: clienteSeleccionado.id,
+          tipo_servicio: datos.tipoServicio,
+          categoria: datos.categoria,
+          espesor: datos.espesor || null,
+          precio_por_ft2: datos.precioPorFt2,
+          con_luz: datos.conLuz || false,
+          metodo_calculo: datos.metodoCalculo || 'area',
+          alto: datos.alto,
+          ancho: datos.ancho,
+          unidad: datos.unidad,
+          cantidad: datos.cantidad || 1,
+          area_unitaria: resultadoCalculo.areaUnitaria,
+          area_total: resultadoCalculo.areaTotal,
+          precio_base: resultadoCalculo.precioBase,
+          recargo_color: resultadoCalculo.recargoColor || 0,
+          color_personalizado: datos.colorPersonalizado || false,
+          subtotal: resultadoCalculo.subtotal,
+          itbms: resultadoCalculo.itbms || 0,
+          aplicar_itbms: datos.aplicarITBMS || false,
+          total: resultadoCalculo.total,
+          datos_calculo_json: JSON.stringify(resultadoCalculo)
+        };
+
+        const response = await cotizacionesService.create(cotizacionData);
+        if (response.success) {
+          mostrarAlerta('success', `✓ Cotización ${response.data.numero_cotizacion} guardada exitosamente`, 5000);
+        }
+      } catch (error) {
+        console.error('Error al guardar en BD:', error);
+        mostrarAlerta('warning', 'Cotización calculada pero no se pudo guardar en la base de datos', 6000);
+      }
 
       // Scroll suave a resultados
       setTimeout(() => {
@@ -245,6 +287,31 @@ function AppContent() {
             </li>
           </ul>
         </div>
+
+        {/* Gestión de Clientes */}
+        <GestionClientes onClienteSeleccionado={setClienteSeleccionado} />
+
+        {/* Cliente Seleccionado */}
+        {clienteSeleccionado && (
+          <div className="cliente-seleccionado-banner">
+            <div className="banner-content">
+              <span className="banner-icon">👤</span>
+              <div className="banner-text">
+                <strong>Cliente Seleccionado:</strong>
+                <span className="banner-detail">
+                  {clienteSeleccionado.nombre}
+                  {clienteSeleccionado.ruc && ` - RUC: ${clienteSeleccionado.ruc}`}
+                </span>
+              </div>
+              <button
+                className="btn-cambiar-cliente"
+                onClick={() => setClienteSeleccionado(null)}
+              >
+                Cambiar Cliente
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Visualizador de CSV */}
         <VisualizadorCSV serviciosData={serviciosData} />
