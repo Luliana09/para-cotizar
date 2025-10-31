@@ -234,7 +234,8 @@
 }
 
 .btn-success,
-.btn-primary {
+.btn-primary,
+.btn-warning {
   color: white;
   display: flex;
   align-items: center;
@@ -272,6 +273,19 @@
 }
 
 .btn-primary:active {
+  transform: translateY(-1px);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+}
+
+.btn-warning:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+}
+
+.btn-warning:active {
   transform: translateY(-1px);
 }
 

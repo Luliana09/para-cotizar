@@ -159,6 +159,11 @@ export const cotizacionesService = {
       params: filters
     });
     return response.data;
+  },
+
+  enviarParaAprobacion: async (id) => {
+    const response = await api.post(`/cotizaciones/${id}/enviar-aprobacion`);
+    return response.data;
   }
 };
 

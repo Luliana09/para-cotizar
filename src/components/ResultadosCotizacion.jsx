@@ -2,7 +2,7 @@ import React from 'react';
 import { formatearMoneda, formatearNumero } from '../utils/conversiones';
 import './ResultadosCotizacion.css';
 
-const ResultadosCotizacion = ({ resultado, onExportarPDF, onImprimir }) => {
+const ResultadosCotizacion = ({ resultado, onExportarPDF, onImprimir, onEnviarAprobacion }) => {
   if (!resultado) return null;
 
   const { entrada, calculos, validaciones, info } = resultado;
@@ -165,6 +165,10 @@ const ResultadosCotizacion = ({ resultado, onExportarPDF, onImprimir }) => {
         <button onClick={onImprimir} className="btn btn-primary">
           <span className="btn-icon">🖨️</span>
           Imprimir
+        </button>
+        <button onClick={onEnviarAprobacion} className="btn btn-warning">
+          <span className="btn-icon">📧</span>
+          Enviar Para Aprobación
         </button>
       </div>
     </div>

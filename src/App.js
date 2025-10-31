@@ -21,6 +21,7 @@ function AppContent() {
   const [resultado, setResultado] = useState(null);
   const [alerta, setAlerta] = useState({ tipo: '', mensaje: '' });
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [cotizacionId, setCotizacionId] = useState(null);
 
   // Cargar CSV al montar el componente
   useEffect(() => {
@@ -126,6 +127,7 @@ function AppContent() {
 
         const response = await cotizacionesService.create(cotizacionData);
         if (response.success) {
+          setCotizacionId(response.data.id); // Guardar ID para enviar email
           mostrarAlerta('success', `✓ Cotización ${response.data.numero_cotizacion} guardada exitosamente`, 5000);
         }
       } catch (error) {
@@ -159,6 +161,25 @@ function AppContent() {
 
   const handleImprimir = () => {
     window.print();
+  };
+
+  const handleEnviarAprobacion = async () => {
+    if (!cotizacionId) {
+      mostrarAlerta('error', 'No hay ID de cotización para enviar', 5000);
+      return;
+    }
+
+    try {
+      mostrarAlerta('info', 'Enviando cotización por correo...', 0);
+      const response = await cotizacionesService.enviarParaAprobacion(cotizacionId);
+
+      if (response.success) {
+        mostrarAlerta('success', '✓ Cotización enviada para aprobación exitosamente', 5000);
+      }
+    } catch (error) {
+      console.error('Error al enviar email:', error);
+      mostrarAlerta('error', 'Error al enviar el correo: ' + (error.response?.data?.message || error.message), 8000);
+    }
   };
 
   const handleCargarCotizacion = (cotizacion) => {
@@ -334,6 +355,7 @@ function AppContent() {
             resultado={resultado}
             onExportarPDF={handleExportarPDF}
             onImprimir={handleImprimir}
+            onEnviarAprobacion={handleEnviarAprobacion}
           />
         )}
 

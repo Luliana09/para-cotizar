@@ -3,6 +3,7 @@ const Cotizacion = db.Cotizacion;
 const Cliente = db.Cliente;
 const Usuario = db.Usuario;
 const { Op } = require('sequelize');
+const { enviarCotizacionParaAprobacion } = require('../services/emailService');
 
 // Generar número de cotización único (COT-YYYY-NNNN)
 const generarNumeroCotizacion = async () => {
@@ -423,6 +424,53 @@ exports.getEstadisticas = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error al obtener estadísticas',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// @desc    Enviar cotización para aprobación por email
+// @route   POST /api/cotizaciones/:id/enviar-aprobacion
+// @access  Private
+exports.enviarParaAprobacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Buscar cotización con información del cliente
+    const cotizacion = await Cotizacion.findByPk(id, {
+      include: [
+        {
+          model: Cliente,
+          as: 'cliente',
+          attributes: ['id', 'nombre', 'ruc', 'email', 'celular']
+        }
+      ]
+    });
+
+    if (!cotizacion) {
+      return res.status(404).json({
+        success: false,
+        message: 'Cotización no encontrada'
+      });
+    }
+
+    // Enviar email
+    const resultado = await enviarCotizacionParaAprobacion(
+      cotizacion.toJSON(),
+      cotizacion.cliente
+    );
+
+    res.json({
+      success: true,
+      message: 'Cotización enviada para aprobación exitosamente',
+      data: resultado
+    });
+
+  } catch (error) {
+    console.error('Error al enviar cotización para aprobación:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al enviar cotización para aprobación',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }

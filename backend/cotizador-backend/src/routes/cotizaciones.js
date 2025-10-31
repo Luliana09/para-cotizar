@@ -18,6 +18,9 @@ router.put('/:id', cotizacionesController.updateCotizacion);
 // Cambiar estado
 router.patch('/:id/estado', cotizacionesController.cambiarEstado);
 
+// Enviar para aprobación por email
+router.post('/:id/enviar-aprobacion', cotizacionesController.enviarParaAprobacion);
+
 // Solo admin puede eliminar cotizaciones
 router.delete('/:id', authorize('admin'), cotizacionesController.deleteCotizacion);
 
