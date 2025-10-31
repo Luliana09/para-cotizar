@@ -218,3 +218,161 @@ exports.cambiarPassword = async (req, res) => {
     });
   }
 };
+
+// @desc    Obtener todos los usuarios
+// @route   GET /api/auth/usuarios
+// @access  Private/Admin
+exports.getUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuario.findAll({
+      attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.json({
+      success: true,
+      count: usuarios.length,
+      data: usuarios
+    });
+  } catch (error) {
+    console.error('Error al obtener usuarios:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener usuarios',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// @desc    Obtener un usuario por ID
+// @route   GET /api/auth/usuarios/:id
+// @access  Private/Admin
+exports.getUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuario.findByPk(id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!usuario) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: usuario
+    });
+  } catch (error) {
+    console.error('Error al obtener usuario:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener usuario',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// @desc    Actualizar usuario
+// @route   PUT /api/auth/usuarios/:id
+// @access  Private/Admin
+exports.updateUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, email, password, rol, activo } = req.body;
+
+    const usuario = await Usuario.findByPk(id);
+    if (!usuario) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+
+    // Verificar si el email ya existe (si se está cambiando)
+    if (email && email !== usuario.email) {
+      const emailExistente = await Usuario.findOne({ where: { email } });
+      if (emailExistente) {
+        return res.status(400).json({
+          success: false,
+          message: 'El email ya está registrado'
+        });
+      }
+    }
+
+    // Construir objeto de actualización
+    const updateData = {};
+    if (nombre) updateData.nombre = nombre;
+    if (email) updateData.email = email;
+    if (rol) updateData.rol = rol;
+    if (activo !== undefined) updateData.activo = activo;
+
+    // Si se proporciona nueva password, hashearla
+    if (password) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+
+    // Actualizar usuario
+    await usuario.update(updateData);
+
+    res.json({
+      success: true,
+      message: 'Usuario actualizado exitosamente',
+      data: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        rol: usuario.rol,
+        activo: usuario.activo
+      }
+    });
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al actualizar usuario',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// @desc    Eliminar usuario
+// @route   DELETE /api/auth/usuarios/:id
+// @access  Private/Admin
+exports.deleteUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // No permitir que un admin se elimine a sí mismo
+    if (parseInt(id) === req.usuario.id) {
+      return res.status(400).json({
+        success: false,
+        message: 'No puedes eliminar tu propio usuario'
+      });
+    }
+
+    const usuario = await Usuario.findByPk(id);
+    if (!usuario) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+
+    await usuario.destroy();
+
+    res.json({
+      success: true,
+      message: 'Usuario eliminado exitosamente'
+    });
+  } catch (error) {
+    console.error('Error al eliminar usuario:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al eliminar usuario',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};

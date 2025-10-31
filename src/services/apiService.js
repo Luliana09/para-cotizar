@@ -167,4 +167,38 @@ export const cotizacionesService = {
   }
 };
 
+// ==================== USUARIOS ====================
+
+export const usuariosService = {
+  getAll: async () => {
+    const response = await api.get('/auth/usuarios');
+    return response.data;
+  },
+
+  getById: async (id) => {
+    const response = await api.get(`/auth/usuarios/${id}`);
+    return response.data;
+  },
+
+  create: async (data) => {
+    const response = await api.post('/auth/register', data);
+    return response.data;
+  },
+
+  update: async (id, data) => {
+    const response = await api.put(`/auth/usuarios/${id}`, data);
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await api.delete(`/auth/usuarios/${id}`);
+    return response.data;
+  },
+
+  cambiarPassword: async (data) => {
+    const response = await api.post('/auth/cambiar-password', data);
+    return response.data;
+  }
+};
+
 export default api;

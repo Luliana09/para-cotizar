@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import Header from './components/Header';
 import GestionClientes from './components/GestionClientes';
+import GestionUsuarios from './components/GestionUsuarios';
 import FormularioCotizacion from './components/FormularioCotizacion';
 import ResultadosCotizacion from './components/ResultadosCotizacion';
 import VisualizadorCSV from './components/VisualizadorCSV';
@@ -313,6 +314,9 @@ function AppContent() {
 
         {/* Gestión de Clientes */}
         <GestionClientes onClienteSeleccionado={setClienteSeleccionado} />
+
+        {/* Gestión de Usuarios (solo para admin) */}
+        {usuario?.rol === 'admin' && <GestionUsuarios />}
 
         {/* Cliente Seleccionado */}
         {clienteSeleccionado && (
