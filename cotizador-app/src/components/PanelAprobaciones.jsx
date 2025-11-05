@@ -226,7 +226,7 @@ const PanelAprobaciones = () => {
 
                   <div className="card-info">
                     <span className="info-label">Cliente:</span>
-                    <span className="info-value">{cotizacion.Cliente?.nombre || 'N/A'}</span>
+                    <span className="info-value">{cotizacion.cliente?.nombre || cotizacion.Cliente?.nombre || 'N/A'}</span>
                   </div>
 
                   <div className="card-info">
@@ -291,7 +291,7 @@ const PanelAprobaciones = () => {
                   </div>
                   <div className="detalle-item">
                     <span className="detalle-label">Cliente:</span>
-                    <span className="detalle-valor">{cotizacionSeleccionada.Cliente?.nombre}</span>
+                    <span className="detalle-valor">{cotizacionSeleccionada.cliente?.nombre || cotizacionSeleccionada.Cliente?.nombre}</span>
                   </div>
                   <div className="detalle-item">
                     <span className="detalle-label">Fecha:</span>

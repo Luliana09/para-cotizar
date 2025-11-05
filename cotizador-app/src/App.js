@@ -130,15 +130,25 @@ function CotizacionPage({ serviciosData, onAlerta }) {
     }
 
     try {
-      onAlerta('info', 'Enviando cotización por correo...', 0);
-      const response = await cotizacionesService.enviarParaAprobacion(cotizacionId);
+      onAlerta('info', 'Enviando cotización para aprobación...', 0);
+
+      // Cambiar el estado a "enviada"
+      const response = await cotizacionesService.cambiarEstado(cotizacionId, 'enviada');
 
       if (response.success) {
         onAlerta('success', '✓ Cotización enviada para aprobación exitosamente', 5000);
+
+        // Opcional: también enviar el correo si existe el endpoint
+        try {
+          await cotizacionesService.enviarParaAprobacion(cotizacionId);
+        } catch (emailError) {
+          console.warn('El correo no pudo ser enviado:', emailError);
+          // No mostrar error al usuario si solo falla el email
+        }
       }
     } catch (error) {
-      console.error('Error al enviar email:', error);
-      onAlerta('error', 'Error al enviar el correo: ' + (error.response?.data?.message || error.message), 8000);
+      console.error('Error al enviar para aprobación:', error);
+      onAlerta('error', 'Error al enviar la cotización: ' + (error.response?.data?.message || error.message), 8000);
     }
   };
 
