@@ -6,6 +6,7 @@ import Registro from './components/Registro';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
+import PanelAprobaciones from './components/PanelAprobaciones';
 import GestionClientes from './components/GestionClientes';
 import GestionUsuarios from './components/GestionUsuarios';
 import FormularioCotizacion from './components/FormularioCotizacion';
@@ -382,6 +383,12 @@ function AppContent() {
               path="/cotizacion"
               element={<CotizacionPage serviciosData={serviciosData} onAlerta={mostrarAlerta} />}
             />
+            {usuario?.rol === 'admin' && (
+              <Route
+                path="/aprobaciones"
+                element={<PanelAprobaciones />}
+              />
+            )}
             <Route
               path="/clientes"
               element={<GestionClientes />}

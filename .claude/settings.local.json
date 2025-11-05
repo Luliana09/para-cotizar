@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm start)",
+      "Bash(set PORT=3001)",
+      "Bash(timeout /t 15 /nobreak)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Sistema de Cotización React\n\n- Implementado sistema completo de cotización\n- 4 componentes React principales\n- 4 servicios de lógica de negocio\n- Todas las reglas del CSV implementadas\n- Visualizador de CSV con estadísticas\n- Historial de cotizaciones con LocalStorage\n- Exportación profesional a PDF\n- Responsive design completo\n- Documentación completa\n\n🤖 Generated with Claude Code https://claude.com/claude-code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(npx sequelize-cli:*)",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nImplementación completa del Backend - Sistema de Cotización\n\nBackend API REST con Node.js, Express, Sequelize y MySQL\n\nCaracterísticas implementadas:\n- ✅ API REST completa con Express\n- ✅ Autenticación JWT con roles (admin, vendedor, visualizador)\n- ✅ Base de datos MySQL con 4 tablas (usuarios, clientes, cotizaciones, configuraciones)\n- ✅ Migraciones de Sequelize\n- ✅ CRUD completo de clientes\n- ✅ CRUD completo de cotizaciones\n- ✅ Generación automática de números de cotización (COT-YYYY-NNNN)\n- ✅ Sistema de estados para cotizaciones (borrador, enviada, aprobada, rechazada, vencida)\n- ✅ Validaciones y manejo de errores\n- ✅ CORS configurado para React frontend\n- ✅ Middleware de autenticación y autorización\n- ✅ Seeder con usuario admin inicial (admin@cotizador.com / admin123)\n- ✅ Estadísticas de cotizaciones\n- ✅ Búsqueda y filtrado de clientes\n- ✅ Almacenamiento JSON de datos completos de cálculo\n\nEstructura creada:\n- src/config/ - Configuración de Sequelize\n- src/controllers/ - Lógica de negocio (auth, clientes, cotizaciones)\n- src/middleware/ - Middleware de autenticación\n- src/models/ - Modelos de Sequelize (4 modelos)\n- src/migrations/ - Migraciones de base de datos (4 tablas)\n- src/seeders/ - Datos iniciales (usuario admin)\n- src/routes/ - Rutas de la API\n- src/server.js - Servidor Express\n\nAPI Endpoints:\n- POST /api/auth/login - Login\n- GET /api/auth/me - Usuario actual\n- POST /api/auth/register - Registrar usuario (admin)\n- GET /api/clientes - Listar clientes\n- POST /api/clientes - Crear cliente\n- GET /api/cotizaciones - Listar cotizaciones\n- POST /api/cotizaciones - Crear cotización\n- Y más...\n\nServidor corriendo en: http://localhost:5000\n\n🤖 Generated with Claude Code https://claude.com/claude-code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(nul)",
+      "Bash(xcopy:*)",
+      "Bash(robocopy:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAgregar Backend completo - Sistema de Cotización API REST\n\nImplementación completa del backend con Node.js + Express + MySQL\n\nCaracterísticas del Backend:\n- ✅ API REST completa con Express\n- ✅ Autenticación JWT con roles (admin, vendedor, visualizador)\n- ✅ Base de datos MySQL con Sequelize ORM\n- ✅ 4 tablas: usuarios, clientes, cotizaciones, configuraciones\n- ✅ Migraciones de Sequelize para gestión de BD\n- ✅ CRUD completo de clientes\n- ✅ CRUD completo de cotizaciones\n- ✅ Generación automática de números (COT-YYYY-NNNN)\n- ✅ Sistema de estados (borrador, enviada, aprobada, rechazada, vencida)\n- ✅ Validaciones y manejo de errores\n- ✅ CORS configurado para React frontend\n- ✅ Middleware de autenticación y autorización\n- ✅ Usuario admin inicial (admin@cotizador.com / admin123)\n- ✅ Estadísticas de cotizaciones\n- ✅ Búsqueda y filtrado\n- ✅ Almacenamiento JSON de datos completos\n\nEstructura del Backend:\nbackend/cotizador-backend/\n├── src/\n│   ├── config/         - Configuración Sequelize\n│   ├── controllers/    - Lógica de negocio\n│   ├── middleware/     - Autenticación\n│   ├── models/         - Modelos Sequelize (4)\n│   ├── migrations/     - Migraciones BD (4 tablas)\n│   ├── seeders/        - Usuario admin inicial\n│   ├── routes/         - Rutas API\n│   └── server.js       - Servidor Express\n├── package.json\n├── .sequelizerc\n└── README.md           - Documentación completa\n\nAPI Endpoints:\n- Auth: login, register, me, cambiar-password\n- Clientes: CRUD completo\n- Cotizaciones: CRUD + estadísticas + cambio de estado\n\nServidor: http://localhost:5000\nBase de datos: cotizador_db (MySQL)\n\n🤖 Generated with Claude Code https://claude.com/claude-code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(dir node_modulesreact-router-domdist)",
+      "Bash(timeout /t 10 /nobreak)",
+      "Bash(rd /s /q node_modules 2)",
+      "Bash(del package-lock.json 2)",
+      "Bash(cmd //c \"taskkill /PID 32968 /F\")",
+      "Bash(ping:*)",
+      "Bash(cmd //c \"taskkill /PID 15216 /F\")",
+      "Bash(del nul 2)",
+      "Bash(rd /s /q cotizador-app.git 2)",
+      "Bash(rd /s /q cotizador-backend.git 2)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

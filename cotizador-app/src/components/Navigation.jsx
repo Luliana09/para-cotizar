@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Navigation.css';
 
 const Navigation = () => {
   const location = useLocation();
+  const { usuario } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const menuItems = [
@@ -18,6 +20,13 @@ const Navigation = () => {
       icon: '📝',
       label: 'Sistema de Cotización',
       description: 'Crear nueva cotización'
+    },
+    {
+      path: '/aprobaciones',
+      icon: '✅',
+      label: 'Panel de Aprobaciones',
+      description: 'Aprobar cotizaciones',
+      adminOnly: true
     },
     {
       path: '/clientes',
@@ -77,25 +86,26 @@ const Navigation = () => {
         </div>
 
         <div className="nav-menu">
-          {menuItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
-              title={isCollapsed ? item.label : ''}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              {!isCollapsed && (
-                <div className="nav-content">
-                  <span className="nav-label">{item.label}</span>
-                  <span className="nav-description">{item.description}</span>
-                </div>
-              )}
-              {isActive(item.path) && <div className="nav-indicator"></div>}
-            </Link>
-          ))}
+          {menuItems
+            .filter(item => !item.adminOnly || usuario?.rol === 'admin')
+            .map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
+                title={isCollapsed ? item.label : ''}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                {!isCollapsed && (
+                  <div className="nav-content">
+                    <span className="nav-label">{item.label}</span>
+                    <span className="nav-description">{item.description}</span>
+                  </div>
+                )}
+                {isActive(item.path) && <div className="nav-indicator"></div>}
+              </Link>
+            ))}
         </div>
-
         <div className="nav-footer">
           {!isCollapsed && (
             <div className="nav-info">
