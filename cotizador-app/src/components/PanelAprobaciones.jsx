@@ -19,10 +19,14 @@ const PanelAprobaciones = () => {
   const cargarCotizaciones = async () => {
     try {
       setLoading(true);
+      console.log('🔍 Cargando cotizaciones...');
+
       const response = await cotizacionesService.getAll();
+      console.log('📦 Respuesta del servidor:', response);
 
       if (response.success) {
-        let cotizacionesFiltradas = response.data;
+        let cotizacionesFiltradas = response.data || [];
+        console.log('✅ Cotizaciones recibidas:', cotizacionesFiltradas.length);
 
         // Filtrar según el estado seleccionado
         if (filtro === 'pendientes') {
@@ -35,11 +39,20 @@ const PanelAprobaciones = () => {
           cotizacionesFiltradas = cotizacionesFiltradas.filter(c => c.estado === 'rechazada');
         }
 
+        console.log(`📊 Cotizaciones filtradas (${filtro}):`, cotizacionesFiltradas.length);
         setCotizaciones(cotizacionesFiltradas);
+
+        if (cotizacionesFiltradas.length === 0) {
+          mostrarAlerta('info', `No hay cotizaciones ${filtro === 'pendientes' ? 'pendientes' : filtro}`, 3000);
+        }
+      } else {
+        console.error('❌ Error en respuesta:', response.message);
+        mostrarAlerta('error', response.message || 'Error al cargar las cotizaciones');
       }
     } catch (error) {
-      console.error('Error al cargar cotizaciones:', error);
-      mostrarAlerta('error', 'Error al cargar las cotizaciones');
+      console.error('❌ Error al cargar cotizaciones:', error);
+      console.error('Detalles del error:', error.response?.data);
+      mostrarAlerta('error', `Error al cargar las cotizaciones: ${error.response?.data?.message || error.message}`);
     } finally {
       setLoading(false);
     }

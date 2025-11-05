@@ -167,9 +167,14 @@ const ResultadosCotizacion = ({ resultado, onExportarPDF, onImprimir, onEnviarAp
           Imprimir
         </button>
         <button onClick={onEnviarAprobacion} className="btn btn-warning">
-          <span className="btn-icon">📧</span>
+          <span className="btn-icon">✅</span>
           Enviar Para Aprobación
         </button>
+      </div>
+
+      <div className="info-note">
+        <p><strong>Nota:</strong> La cotización se guarda automáticamente al calcular.
+        El botón "Enviar Para Aprobación" cambia el estado a "Enviada" para revisión del administrador.</p>
       </div>
     </div>
   );

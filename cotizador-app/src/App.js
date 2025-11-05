@@ -62,6 +62,9 @@ function CotizacionPage({ serviciosData, onAlerta }) {
 
       // Guardar en base de datos
       try {
+        console.log('💾 Intentando guardar cotización en BD...');
+        console.log('👤 Cliente seleccionado:', clienteSeleccionado);
+
         const cotizacionData = {
           cliente_id: clienteSeleccionado.id,
           tipo_servicio: datos.tipoServicio,
@@ -86,14 +89,23 @@ function CotizacionPage({ serviciosData, onAlerta }) {
           datos_calculo_json: JSON.stringify(resultadoCalculo)
         };
 
+        console.log('📄 Datos de cotización a guardar:', cotizacionData);
+
         const response = await cotizacionesService.create(cotizacionData);
+        console.log('✅ Respuesta del servidor:', response);
+
         if (response.success) {
           setCotizacionId(response.data.id);
-          onAlerta('success', `✓ Cotización ${response.data.numero_cotizacion} guardada exitosamente`, 5000);
+          console.log('🎉 Cotización guardada con ID:', response.data.id);
+          onAlerta('success', `✓ Cotización ${response.data.numero_cotizacion} guardada exitosamente en Base de Datos`, 5000);
+        } else {
+          console.error('❌ Error en respuesta:', response);
+          onAlerta('error', `Error al guardar: ${response.message}`, 6000);
         }
       } catch (error) {
-        console.error('Error al guardar en BD:', error);
-        onAlerta('warning', 'Cotización calculada pero no se pudo guardar en la base de datos', 6000);
+        console.error('❌ Error al guardar en BD:', error);
+        console.error('Detalles:', error.response?.data);
+        onAlerta('error', `Error al guardar en BD: ${error.response?.data?.message || error.message}`, 8000);
       }
 
       // Scroll suave a resultados

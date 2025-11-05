@@ -35,7 +35,21 @@
       "Bash(cmd //c \"taskkill /PID 15216 /F\")",
       "Bash(del nul 2)",
       "Bash(rd /s /q cotizador-app.git 2)",
-      "Bash(rd /s /q cotizador-backend.git 2)"
+      "Bash(rd /s /q cotizador-backend.git 2)",
+      "Bash(c:xamppmysqlbinmysql.exe -u root -e \"SHOW DATABASES LIKE ''cotizador%'';\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"SHOW DATABASES LIKE ''cotizador%'';\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; SHOW TABLES;\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; DESCRIBE cotizaciones;\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; SELECT COUNT(*) as total_cotizaciones FROM cotizaciones;\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; SELECT id, nombre, email, rol FROM usuarios;\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; SELECT COUNT(*) as total_clientes FROM clientes;\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; INSERT INTO cotizaciones (numero_cotizacion, usuario_id, cliente_id, tipo_servicio, categoria, precio_por_ft2, metodo_calculo, alto, ancho, unidad, cantidad, area_unitaria, area_total, precio_base, subtotal, total, estado) VALUES (''COT-2025-TEST'', 1, 1, ''Rotulación'', ''Letras Acrilicas'', 15.50, ''area'', 12.00, 24.00, ''in'', 1, 2.00, 2.00, 31.00, 31.00, 31.00, ''borrador'');\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; SELECT id, numero_cotizacion, estado, total FROM cotizaciones;\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; DELETE FROM cotizaciones WHERE numero_cotizacion = ''COT-2025-TEST'';\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; INSERT INTO cotizaciones (numero_cotizacion, usuario_id, cliente_id, tipo_servicio, categoria, precio_por_ft2, metodo_calculo, alto, ancho, unidad, cantidad, area_unitaria, area_total, precio_base, subtotal, total, estado) VALUES (''COT-2025-0001'', 1, 1, ''Rotulación'', ''Letras Acrilicas'', 15.50, ''area'', 12.00, 24.00, ''in'', 1, 2.00, 2.00, 31.00, 31.00, 31.00, ''enviada'');\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; INSERT INTO cotizaciones (numero_cotizacion, usuario_id, cliente_id, tipo_servicio, categoria, precio_por_ft2, metodo_calculo, alto, ancho, unidad, cantidad, area_unitaria, area_total, precio_base, subtotal, total, estado) VALUES (''COT-2025-0002'', 2, 2, ''Rotulación'', ''Letras Formadas'', 25.00, ''letra'', 18.00, 36.00, ''in'', 5, 4.50, 22.50, 562.50, 562.50, 562.50, ''borrador''), (''COT-2025-0003'', 1, 3, ''Impresión Digital'', ''Banner Lona'', 8.50, ''area'', 48.00, 96.00, ''in'', 2, 32.00, 64.00, 544.00, 544.00, 544.00, ''aprobada'');\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; SELECT id, numero_cotizacion, estado, total, usuario_id, cliente_id FROM cotizaciones ORDER BY id;\")",
+      "Bash(\"C:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE cotizador_db; SELECT * FROM clientes;\")"
     ],
     "deny": [],
     "ask": []
