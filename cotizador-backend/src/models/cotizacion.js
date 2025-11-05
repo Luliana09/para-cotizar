@@ -40,10 +40,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50),
       allowNull: true
     },
-    milimetro_calibre: {
-      type: DataTypes.STRING(20),
-      allowNull: true
-    },
 
     // Datos de cálculo
     metodo_calculo: {
@@ -147,6 +143,11 @@ module.exports = (sequelize, DataTypes) => {
 
     // JSON con datos completos del servicio (backup)
     datos_servicio_json: {
+      type: DataTypes.JSON,
+      allowNull: true
+    },
+    // JSON con datos completos del cálculo
+    datos_calculo_json: {
       type: DataTypes.JSON,
       allowNull: true
     }

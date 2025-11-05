@@ -67,11 +67,11 @@ function CotizacionPage({ serviciosData, onAlerta }) {
 
         const cotizacionData = {
           cliente_id: clienteSeleccionado.id,
-          tipo_servicio: datos.tipoServicio,
-          categoria: datos.categoria,
-          espesor: datos.espesor || null,
-          precio_por_ft2: datos.precioPorFt2,
-          con_luz: datos.conLuz || false,
+          tipo_servicio: datos.servicio['TIPO DE SERVICIO'] || datos.tipoServicio,
+          categoria: datos.servicio['CATEGORIA'] || datos.categoria,
+          espesor: datos.servicio['ESPESOR'] || datos.espesor || null,
+          precio_por_ft2: resultadoCalculo.precioPorFt2 || datos.precioPorFt2,
+          con_luz: datos.servicio['CON LUZ'] === 'SI' || datos.conLuz || false,
           metodo_calculo: datos.metodoCalculo || 'area',
           alto: datos.alto,
           ancho: datos.ancho,
