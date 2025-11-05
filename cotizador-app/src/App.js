@@ -422,7 +422,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
-          <Route path="/" element={<AppContent />} />
+          <Route path="/*" element={<AppContent />} />
         </Routes>
       </AuthProvider>
     </Router>
