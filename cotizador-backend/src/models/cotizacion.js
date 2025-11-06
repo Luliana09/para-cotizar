@@ -136,19 +136,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    condicionales_aplicadas: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
 
-    // JSON con datos completos del servicio (backup)
-    datos_servicio_json: {
-      type: DataTypes.JSON,
-      allowNull: true
-    },
     // JSON con datos completos del cálculo
     datos_calculo_json: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: true
     }
   }, {

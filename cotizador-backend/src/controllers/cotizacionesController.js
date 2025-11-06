@@ -455,8 +455,8 @@ exports.cambiarEstado = async (req, res) => {
 
     const cotizacion = await Cotizacion.findByPk(id, {
       include: [
-        { model: Cliente, as: 'Cliente' },
-        { model: Usuario, as: 'Usuario', attributes: ['id', 'nombre', 'email', 'rol'] }
+        { model: Cliente, as: 'cliente' },
+        { model: Usuario, as: 'usuario', attributes: ['id', 'nombre', 'email', 'rol'] }
       ]
     });
 
