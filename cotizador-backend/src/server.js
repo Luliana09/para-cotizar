@@ -47,6 +47,8 @@ app.get('/health', async (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/clientes', require('./routes/clientes'));
 app.use('/api/cotizaciones', require('./routes/cotizaciones'));
+app.use('/api/tickets', require('./routes/tickets'));
+app.use('/api/departamentos', require('./routes/departamentos'));
 
 // Manejo de errores 404
 app.use((req, res) => {

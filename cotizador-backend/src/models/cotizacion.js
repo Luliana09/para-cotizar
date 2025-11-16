@@ -114,7 +114,7 @@ module.exports = (sequelize, DataTypes) => {
 
     // Estado y seguimiento
     estado: {
-      type: DataTypes.ENUM('borrador', 'enviada', 'aprobada', 'rechazada', 'vencida'),
+      type: DataTypes.ENUM('borrador', 'enviada', 'aprobada', 'en_produccion', 'rechazada', 'vencida'),
       defaultValue: 'borrador',
       allowNull: false
     },
