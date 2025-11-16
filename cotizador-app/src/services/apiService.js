@@ -201,4 +201,78 @@ export const usuariosService = {
   }
 };
 
+// ==================== TICKETS ====================
+
+export const ticketsService = {
+  getAll: async (filters = {}) => {
+    const response = await api.get('/tickets', {
+      params: filters
+    });
+    return response.data;
+  },
+
+  getById: async (id) => {
+    const response = await api.get(`/tickets/${id}`);
+    return response.data;
+  },
+
+  create: async (ticketData) => {
+    const response = await api.post('/tickets', ticketData);
+    return response.data;
+  },
+
+  update: async (id, ticketData) => {
+    const response = await api.put(`/tickets/${id}`, ticketData);
+    return response.data;
+  },
+
+  cambiarEstado: async (id, estado) => {
+    const response = await api.patch(`/tickets/${id}/estado`, { estado });
+    return response.data;
+  },
+
+  agregarMensaje: async (id, mensaje) => {
+    const response = await api.post(`/tickets/${id}/mensajes`, { mensaje });
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await api.delete(`/tickets/${id}`);
+    return response.data;
+  },
+
+  getEstadisticas: async (filters = {}) => {
+    const response = await api.get('/tickets/stats/resumen', {
+      params: filters
+    });
+    return response.data;
+  }
+};
+
+// ==================== DEPARTAMENTOS ====================
+
+export const departamentosService = {
+  getAll: async (activo) => {
+    const response = await api.get('/departamentos', {
+      params: { activo }
+    });
+    return response.data;
+  },
+
+  create: async (data) => {
+    const response = await api.post('/departamentos', data);
+    return response.data;
+  },
+
+  update: async (id, data) => {
+    const response = await api.put(`/departamentos/${id}`, data);
+    return response.data;
+  },
+
+  delete: async (id) => {
+    const response = await api.delete(`/departamentos/${id}`);
+    return response.data;
+  }
+};
+
 export default api;

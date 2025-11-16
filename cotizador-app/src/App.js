@@ -13,6 +13,9 @@ import FormularioCotizacion from './components/FormularioCotizacion';
 import ResultadosCotizacion from './components/ResultadosCotizacion';
 import VisualizadorCSV from './components/VisualizadorCSV';
 import HistorialCotizaciones, { guardarEnHistorial } from './components/HistorialCotizaciones';
+import PanelCotizacionesAprobadas from './components/PanelCotizacionesAprobadas';
+import FormularioTicket from './components/FormularioTicket';
+import MisTickets from './components/MisTickets';
 import { cargarCSV } from './services/csvService';
 import { calcularCotizacion, validarDatos } from './services/calculoService';
 import { generarPDF } from './services/pdfService';
@@ -428,6 +431,18 @@ function AppContent() {
             <Route
               path="/historial"
               element={<HistorialCotizaciones onCargarCotizacion={handleCargarCotizacion} />}
+            />
+            <Route
+              path="/cotizaciones-aprobadas"
+              element={<PanelCotizacionesAprobadas />}
+            />
+            <Route
+              path="/crear-ticket"
+              element={<FormularioTicket />}
+            />
+            <Route
+              path="/mis-tickets"
+              element={<MisTickets />}
             />
           </Routes>
 

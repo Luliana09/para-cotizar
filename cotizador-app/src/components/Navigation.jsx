@@ -52,6 +52,18 @@ const Navigation = () => {
       icon: '📋',
       label: 'Historial de Cotizaciones',
       description: 'Ver cotizaciones anteriores'
+    },
+    {
+      path: '/cotizaciones-aprobadas',
+      icon: '✔️',
+      label: 'Cotizaciones Aprobadas',
+      description: 'Convertir en órdenes de trabajo'
+    },
+    {
+      path: '/mis-tickets',
+      icon: '🎫',
+      label: 'Mis Tickets',
+      description: 'Órdenes de trabajo'
     }
   ];
 
