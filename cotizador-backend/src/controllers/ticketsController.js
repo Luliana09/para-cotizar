@@ -5,13 +5,15 @@ const { Op } = require('sequelize');
 // Generar número de ticket único
 const generarNumeroTicket = async () => {
   const año = new Date().getFullYear();
+
+  // Buscar el último ticket del año actual (formato: 000001-2025)
   const ultimoTicket = await Ticket.findOne({
     where: {
       numero_ticket: {
-        [Op.like]: `${año}%`
+        [Op.like]: `%-${año}`
       }
     },
-    order: [['createdAt', 'DESC']]
+    order: [['numero_ticket', 'DESC']]
   });
 
   let nuevoNumero = 1;
