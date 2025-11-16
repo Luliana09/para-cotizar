@@ -67,28 +67,29 @@ function CotizacionPage({ serviciosData, onAlerta }) {
       try {
         console.log('💾 Intentando guardar cotización en BD...');
         console.log('👤 Cliente seleccionado:', clienteSeleccionado);
+        console.log('📊 Resultado del cálculo:', resultadoCalculo);
 
         const cotizacionData = {
           cliente_id: clienteSeleccionado.id,
           tipo_servicio: datos.servicio['TIPO DE SERVICIO'] || datos.tipoServicio,
           categoria: datos.servicio['CATEGORIA'] || datos.categoria,
           espesor: datos.servicio['ESPESOR'] || datos.espesor || null,
-          precio_por_ft2: resultadoCalculo.precioPorFt2 || datos.precioPorFt2,
+          precio_por_ft2: resultadoCalculo.calculos.precioPorFt2,
           con_luz: datos.servicio['CON LUZ'] === 'SI' || datos.conLuz || false,
           metodo_calculo: datos.metodoCalculo || 'area',
           alto: datos.alto,
           ancho: datos.ancho,
           unidad: datos.unidad,
           cantidad: datos.cantidad || 1,
-          area_unitaria: resultadoCalculo.areaUnitaria,
-          area_total: resultadoCalculo.areaTotal,
-          precio_base: resultadoCalculo.precioBase,
-          recargo_color: resultadoCalculo.recargoColor || 0,
+          area_unitaria: resultadoCalculo.calculos.areaUnitaria,
+          area_total: resultadoCalculo.calculos.areaTotal,
+          precio_base: resultadoCalculo.calculos.precioBase,
+          recargo_color: resultadoCalculo.calculos.recargoColor || 0,
           color_personalizado: datos.colorPersonalizado || false,
-          subtotal: resultadoCalculo.subtotal,
-          itbms: resultadoCalculo.itbms || 0,
+          subtotal: resultadoCalculo.calculos.subtotal,
+          itbms: resultadoCalculo.calculos.itbms || 0,
           aplicar_itbms: datos.aplicarITBMS || false,
-          total: resultadoCalculo.total,
+          total: resultadoCalculo.calculos.total,
           datos_calculo_json: JSON.stringify(resultadoCalculo)
         };
 
