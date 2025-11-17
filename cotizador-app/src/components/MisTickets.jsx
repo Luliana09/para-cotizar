@@ -126,7 +126,15 @@ const MisTickets = () => {
   return (
     <div className="mis-tickets-container">
       <div className="tickets-header">
-        <h2>🎫 Mis Tickets</h2>
+        <div className="header-top">
+          <h2>🎫 Mis Tickets</h2>
+          <button
+            className="btn-nuevo-ticket"
+            onClick={() => window.location.href = '/crear-ticket'}
+          >
+            + Crear Nuevo Ticket
+          </button>
+        </div>
         <div className="filtros">
           <button
             className={`filtro-btn ${filtroEstado === 'todos' ? 'active' : ''}`}

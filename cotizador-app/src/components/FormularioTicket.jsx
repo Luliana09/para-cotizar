@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ticketsService, departamentosService, usuariosService } from '../services/apiService';
+import { ticketsService, departamentosService, usuariosService, clientesService } from '../services/apiService';
 import './FormularioTicket.css';
 
 const FormularioTicket = () => {
@@ -22,6 +22,7 @@ const FormularioTicket = () => {
 
   const [departamentos, setDepartamentos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alerta, setAlerta] = useState({ tipo: '', mensaje: '' });
 
@@ -34,21 +35,32 @@ const FormularioTicket = () => {
 
   const cargarDatos = async () => {
     try {
-      const [deptResponse, userResponse] = await Promise.all([
+      const promises = [
         departamentosService.getAll(true),
         usuariosService.getAll()
-      ]);
+      ];
 
-      if (deptResponse.success) {
-        setDepartamentos(deptResponse.data);
+      // Si no viene de una cotización, cargar clientes también
+      if (!cotizacion) {
+        promises.push(clientesService.getAll());
       }
 
-      if (userResponse.success) {
-        setUsuarios(userResponse.data);
+      const responses = await Promise.all(promises);
+
+      if (responses[0].success) {
+        setDepartamentos(responses[0].data);
+      }
+
+      if (responses[1].success) {
+        setUsuarios(responses[1].data);
+      }
+
+      if (!cotizacion && responses[2]?.success) {
+        setClientes(responses[2].data);
       }
     } catch (error) {
       console.error('Error al cargar datos:', error);
-      mostrarAlerta('error', 'Error al cargar departamentos y usuarios');
+      mostrarAlerta('error', 'Error al cargar datos necesarios');
     }
   };
 
@@ -89,6 +101,11 @@ ${cotizacion.notas ? `Notas de la cotización:\n${cotizacion.notas}` : ''}`;
     e.preventDefault();
 
     // Validaciones
+    if (!formData.cliente_id) {
+      mostrarAlerta('error', 'Debe seleccionar un cliente');
+      return;
+    }
+
     if (!formData.departamento_id) {
       mostrarAlerta('error', 'Debe seleccionar un departamento');
       return;
@@ -104,8 +121,7 @@ ${cotizacion.notas ? `Notas de la cotización:\n${cotizacion.notas}` : ''}`;
 
       const ticketData = {
         ...formData,
-        usuario_asignado_id: formData.usuario_asignado_id || null,
-        cliente_id: cotizacion?.cliente_id || formData.cliente_id
+        usuario_asignado_id: formData.usuario_asignado_id || null
       };
 
       console.log('📤 Enviando ticket:', ticketData);
@@ -127,19 +143,28 @@ ${cotizacion.notas ? `Notas de la cotización:\n${cotizacion.notas}` : ''}`;
   };
 
   const handleCancelar = () => {
-    navigate('/cotizaciones-aprobadas');
+    if (cotizacion) {
+      navigate('/cotizaciones-aprobadas');
+    } else {
+      navigate('/mis-tickets');
+    }
   };
 
   return (
     <div className="formulario-ticket-container">
       <div className="formulario-header">
         <h2>
-          {cotizacion ? '🎫 Generar Orden de Trabajo' : '🎫 Crear Ticket'}
+          {cotizacion ? '🎫 Generar Orden de Trabajo desde Cotización' : '🎫 Crear Nuevo Ticket'}
         </h2>
         {cotizacion && (
           <div className="cotizacion-badge">
-            Desde cotización: {cotizacion.numero_cotizacion}
+            Cotización: {cotizacion.numero_cotizacion}
           </div>
+        )}
+        {!cotizacion && (
+          <p style={{ color: '#7f8c8d', margin: '10px 0 0 0' }}>
+            Crear un ticket/orden de trabajo sin necesidad de una cotización previa
+          </p>
         )}
       </div>
 
@@ -161,6 +186,35 @@ ${cotizacion.notas ? `Notas de la cotización:\n${cotizacion.notas}` : ''}`;
               <div className="info-item">
                 <span className="label">Total:</span>
                 <span className="value total">${cotizacion.total}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Selector de Cliente (solo si no viene de cotización) */}
+        {!cotizacion && (
+          <div className="form-section">
+            <h3>Información del Cliente</h3>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="cliente_id">
+                  Cliente <span className="required">*</span>
+                </label>
+                <select
+                  id="cliente_id"
+                  name="cliente_id"
+                  value={formData.cliente_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                >
+                  <option value="">Seleccionar cliente...</option>
+                  {clientes.map(cliente => (
+                    <option key={cliente.id} value={cliente.id}>
+                      {cliente.nombre} {cliente.ruc ? `- RUC: ${cliente.ruc}` : ''}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
